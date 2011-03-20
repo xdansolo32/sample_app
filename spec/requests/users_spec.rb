@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-
-  
   describe "signup" do
   	describe "failure" do
   	  
@@ -31,7 +29,6 @@ require 'spec_helper'
   	    click_button
   	    response.should have_selector("div.flash.success", :content => "Welcome")
   	    response.should render_template('users/show')
-  	    
   	   end.should change(User, :count).by(1)
   	  end
   	 end

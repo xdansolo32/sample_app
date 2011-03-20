@@ -35,6 +35,27 @@ describe UsersController do
       response.should have_selector("input[name='user[password_confirmation]'][type='password']")
     end
     
+    describe "new/create pages for signed-in users" do
+		before(:each) do
+			@user = Factory(:user)
+			test_sign_in(@user)
+		end
+
+		it "should deny access to 'new' " do
+			get :new
+			response.should redirect_to(root_path)
+			flash[:info].should =~ /You're already logged in/i 
+		end
+
+		it "should deny access to 'create' " do
+			@attr = { :name => "New User", :email => "user@example.com",
+			:password => "foobar", :password_confirmation => "foobar" }	
+			post :create, :user => @attr
+			flash[:info].should =~ /You're already logged in/i
+			response.should redirect_to(root_path) 
+		end	
+
+	end
   end
   
   describe "GET 'show'" do
@@ -290,6 +311,7 @@ describe UsersController do
        delete :destroy, :id => @user
        response.should redirect_to(signin_path)
      end
+     
    end
    
    describe "as a non-admin user" do
@@ -298,12 +320,19 @@ describe UsersController do
        delete :destroy, :id => @user
        response.should redirect_to(root_path)
      end
+     
+     it "should not show the delete links" do
+       test_sign_in(@user)
+       get :index
+       response.should_not  have_selector("a", :content => "delete")
+     end
+     
    end
    
    describe" as an admin user" do
      before(:each) do
-       admin = Factory(:user, :email => "admin@example.com", :admin => true)
-       test_sign_in(admin)
+       @admin = Factory(:user, :email => "admin@example.com", :admin => true)
+       test_sign_in(@admin)
      end
      
      it "should destroy the user" do
@@ -315,6 +344,13 @@ describe UsersController do
      it "should redirect to the users page" do
        delete :destroy, :id => @user
        response.should redirect_to(users_path)
+     end
+     
+     it "should not be able to destroy itself" do
+       lambda do
+         delete :destroy, :id => @admin
+       end.should_not change(User, :count).by(-1)
+       flash[:error].should =~ /Suicide not allowed!!~~/i
      end
      
    end
