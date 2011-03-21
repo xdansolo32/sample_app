@@ -1,3 +1,17 @@
+<% if signed_in? %>
+  <table class="front" summary="For signed-in users">
+    <tr>
+      <td class="main">
+        <h1 class="micropost">What's up?</h1>
+        <%= render 'shared/micropost_form' %>
+        <%= render 'shared/feed' %>
+      </td>
+      <td class="sidebar round">
+        <%= render 'shared/user_info' %>
+      </td>
+    </tr>
+  </table>
+<% else %>
 <h1>I LOVE EMMA STONE</h1>
 
 <p>
@@ -12,3 +26,4 @@
  Powered by the <a href="http://railstutorial.org/">Wooby on Wails Tutorial</a>
   sample application.
   </p>
+<% end %>
