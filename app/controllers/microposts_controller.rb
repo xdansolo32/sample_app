@@ -17,6 +17,11 @@ class MicropostsController < ApplicationController
     @micropost.destroy
     redirect_back_or root_path
   end
+  
+  def index
+    @title = "All microposts"
+    @microposts = current_user.microposts.paginate(:page => params[:page])
+  end
 
   private
 

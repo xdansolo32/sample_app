@@ -1,6 +1,3 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
-
 <SCRIPT LANGUAGE="JavaScript">
 // function parameters are: field - the string field, count - the field for remaining characters number and max - the maximum number of characters 
 function CountLeft(field, count, max) {
@@ -13,3 +10,13 @@ count.value = max - field.value.length;
 }
 </script>
 
+<center>
+<form name=sample action="">
+<font size="1" face="arial, helvetica, sans-serif"> Only 50 characters allowed!
+<input name="text" type="text" size="40"
+onKeyDown="CountLeft(this.form.text,this.form.left,140);" 
+onKeyUp="CountLeft(this.form.text,this.form.left,140);">
+<input readonly type="text" name="left" size=3 maxlength=3 value="140"> 
+characters left</font>
+</form>
+</center>
